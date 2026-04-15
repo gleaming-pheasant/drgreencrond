@@ -19,9 +19,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     match tracing_journald::layer() {
         Ok(layer) => {
             registry.with(layer).init();
-        }
-        // journald is typically available on Linux systems, but nowhere else. Portable software
-        // should handle its absence gracefully.
+        },
         Err(e) => {
             registry.init();
             tracing::error!("couldn't connect to journald: {}", e);
