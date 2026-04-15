@@ -2,7 +2,7 @@
 ## Hello, my name is Dr. GreenCron
 <p align="center">
     <img
-        src="https://github.com/gleaming-pheasant/drgreencrond/resources/dgclogo-sml.png?raw=true"
+        src="https://github.com/gleaming-pheasant/drgreencrond/blob/main/resources/dgclogo-sml.png?raw=true"
         alt="the drgreencron logo" 
     />
 </p>
