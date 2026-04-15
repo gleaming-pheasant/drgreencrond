@@ -8,7 +8,7 @@
 </p>
 
 ## About
-dtgreencrond is a task scheduling daemon similar to 
+drgreencrond is a task scheduling daemon similar to 
 [cron](https://wiki.archlinux.org/title/Cron) or 
 [systemd Timers](https://wiki.archlinux.org/title/Systemd/Timers).
 
