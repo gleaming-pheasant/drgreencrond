@@ -1,0 +1,10 @@
+[Unit]
+Description=A test service that writes to journalctl
+
+[Service]
+ExecStart=/usr/bin/sh -c 'echo "hello from drgreencron"'
+Type=oneshot
+# No User; runs as root by default
+
+[Install]
+WantedBy=default.target
