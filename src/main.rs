@@ -1,3 +1,11 @@
+//! Todo:
+//!  - Implement read of .timer files,
+//!  - Implement "except" timer intepretation, including writing of "except" 
+//!  arrays in the custom extension of the .timer file types,
+//!  - Implement .stamp file writing when scheduling tasks daily,
+//!  - Implement .last file writing when completing tasks, to guarantee that 
+//!  dynamically scheduled tasks are falling within the schedule format,
+//!  - Implement scheduling of the tasks themselves.
 mod forecast;
 
 use std::os::unix::io::AsRawFd;
@@ -27,7 +35,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let mut poll = Poll::new()?;
-    let mut events = Events::with_capacity(10); // 10 simultaneous, not 10 total registered
+    let mut events = Events::with_capacity(10);
     
     let mut mask = SigSet::empty();
     mask.add(Signal::SIGHUP);
