@@ -34,6 +34,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
+    // Implement initialisation:
+    /* 
+        - Are there any hanging .stamp files, indicating that a scheduled run didn't happen?
+            - Reschedule these based on a flag similar to "Persist" which says, "immediately_if_missed" 
+            or "next_24h_trough". Default to "next_24h_trough".
+        - Read config of all existing gtimers. Verify service is present. Schedule them all, reading 
+        from previous runs to establish next window.
+     */
+
     let mut poll = Poll::new()?;
     let mut events = Events::with_capacity(10);
     
