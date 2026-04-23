@@ -8,12 +8,16 @@
 //!  - Implement scheduling of the tasks themselves.
 mod forecast;
 
+use std::os::fd::AsFd;
 use std::os::unix::io::AsRawFd;
 
 use mio::{Events, Poll, Token, Interest};
 use mio::unix::SourceFd;
 use nix::sys::signal::{sigprocmask, SigmaskHow, Signal, SigSet};
 use nix::sys::signalfd::SignalFd;
+use nix::sys::time::TimeSpec;
+use nix::sys::timer::TimerSetTimeFlags;
+use nix::sys::timerfd::{ClockId, Expiration, TimerFd, TimerFlags};
 use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 
@@ -59,6 +63,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Interest::READABLE
     )?;
 
+    // TFD_NONBLOCK ensures we don't block if we attempt to read this before the 
+    // expiry is reached. 
+    let timer = TimerFd::new(ClockId::CLOCK_REALTIME, TimerFlags::TFD_NONBLOCK)?;
+    // timer to go off 20 seconds in the future. Where is the token?
+    timer.set(Expiration::OneShot(TimeSpec::new(10, 0)), TimerSetTimeFlags::empty())?;
+
+    let timer_token = Token(69);
+    let mut timer_fd = SourceFd(&timer.as_fd().as_raw_fd());
+
+    poll.registry().register(&mut timer_fd, timer_token, Interest::READABLE)?;
+
     // Leave this label for easy debugging with rust-analyzer.
     '_poll_events: loop {
         poll.poll(&mut events, None)?;
@@ -97,15 +112,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         }
                     }
                 },
+                timer_token => {
+                    println!("The timer expired!");
+                },
                 // Put schedule refresh && process spawning (D-Bus/varlink) logic here.
                 _ => unreachable!()
             }
         }
     }
-
-    // let forecast = forecast::Forecast::fetch_fw_24h_postcode(
-    //     "YO1", time::UtcDateTime::now()
-    // ).unwrap();
-
-    // println!("{:#?}", forecast);
 }
