@@ -7,6 +7,7 @@
 //!  dynamically scheduled tasks are falling within the schedule format,
 //!  - Implement scheduling of the tasks themselves.
 mod forecast;
+mod scheduler;
 
 use std::os::fd::AsFd;
 use std::os::unix::io::AsRawFd;
@@ -22,7 +23,7 @@ use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 
 /// The token associated with either SIGHUP (for reloading cfg), or a terminating signal (SIGTERM, SIGINT).
-const SIGNAL_TOKEN: Token = Token(1);
+const SIGNAL_TOKEN: Token = Token(0);
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let registry = tracing_subscriber::registry()
