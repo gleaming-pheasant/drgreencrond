@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "1.0"
+bitflags = "2.11"
 mio = { version = "1.2", features = ["os-ext"] }
 nix = { version = "0.31", features = ["signal", "time"] }
 serde = { version = "1.0", features = ["derive"] }
