@@ -8,6 +8,7 @@
 //!  - Implement scheduling of the tasks themselves.
 mod forecast;
 mod scheduler;
+mod tasks;
 
 use std::os::fd::AsFd;
 use std::os::unix::io::AsRawFd;
