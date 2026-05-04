@@ -26,6 +26,20 @@
 //! "Except Hour" bitmask == 0, then we know we can just go with the lowest in 
 //! the given period (this means that Except must have exactly the same bitmask 
 //! values as those use to define hours response from the carbon intensity API).
+//!
+//! From testing, the NESO Carbon Intensity API behaviour will always return 
+//! periods in 30-minute intervals, on the 30th minute. The forecast doesn't 
+//! vary based on the time requested (2026-05-04T00:00:00-00:30:00 will always 
+//! be the same intensity, whether it is the first or 10th period returned). The 
+//! request period is always inclusive in the first period returned (e.g. if you 
+//! request, 00:00:00, the first period will be 23:30-00:00). Seconds are ignored 
+//! completely, and are not actually required for the request (2026-05-04T00:00Z 
+//! will work, and 2026-05-04T00:00:59Z will be treat as 2026-05-04T00:00:00Z and 
+//! will return an initial period ending with 00:00).
+//! 
+//! 
+//! Postcodes > Requests >  
+
 use std::ffi::OsString;
 use std::str::FromStr;
 
